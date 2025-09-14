@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - master
   workflow_call:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -29,6 +30,7 @@ jobs:
   test:
     needs: [build]
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
     runs-on: ${{ matrix.os }}-latest
