@@ -34,30 +34,24 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - macos-latest-large
+          # - macos-latest-large
           - windows-latest
+        edge-version:
+          - ''
+          - stable
+          - beta
+          - dev
+          - canary
+        exclude:
+          - os: ubuntu-latest
+            edge-version: canary
+
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: dist
-      - name: "Install default channel on ${{ matrix.os }}"
-        uses: ./
-      - name: "Install stable channel on ${{ matrix.os }}"
+      - name: "Install ${{ matrix.edge.version }} channel on ${{ matrix.os }}"
         uses: ./
         with:
-          edge-version: stable
-      - name: "Install beta channel on ${{ matrix.os }}"
-        uses: ./
-        with:
-          edge-version: beta
-      - name: "Install dev channel on ${{ matrix.os }}"
-        uses: ./
-        with:
-          edge-version: dev
-      - name: "Install canary channel on ${{ matrix.os }}"
-        uses: ./
-        with:
-          edge-version: canary
-        # Canary channel for linux is not currently supported
-        if: ${{ matrix.os != 'ubuntu' }}
+          edge-version: ${{ matrix.edge.version }}
